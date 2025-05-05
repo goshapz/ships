@@ -35,6 +35,27 @@
             <h2>Результат:</h2>
             <img id="output-image" style="max-width: 100%; display: none;">
             <canvas id="output-canvas" width="640" height="480" style="display: none;"></canvas>
+
+            <div id="report-section" style="margin-top: 20px;">
+                <button onclick="downloadReport()">Скачать отчет (PDF)</button>
+            </div>
+
+            <script>
+            function downloadReport() {
+                fetch('/report')
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'ship_report.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => alert('Ошибка при генерации отчета: ' + error));
+            }
+            </script>
         </div>
     </div>
 
